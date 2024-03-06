@@ -1,5 +1,7 @@
 package bank;
 
+import exception.TransactionException;
+
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class ConcurrentBank {
@@ -14,6 +16,9 @@ public class ConcurrentBank {
 
     public void transfer(BankAccount account1, BankAccount account2, int amount) {
         synchronized (this) {
+            if (account1.getBalance() - amount < 0) {
+                throw new TransactionException("Ошибка транзакции");
+            }
             account1.setAmount(account1.getBalance() - amount);
             account2.setAmount(account2.getBalance() + amount);
         }
